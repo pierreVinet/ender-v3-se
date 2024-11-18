@@ -2,7 +2,7 @@ import serial
 import time
 
 # Replace 'COM3' with your serial port (e.g., '/dev/ttyUSB0' for Linux)
-ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+ser = serial.Serial('COM7', 115200, timeout=1)
 time.sleep(2)  # Wait for the connection to initialize
 
 def send_gcode(command):
@@ -36,7 +36,7 @@ send_gcode('G90')  # Set to absolute positioning
 home_axes("Y")  
 
 # Example movement commands
-# move_to_position(x=100, y=100, z=10, speed=1000)
-# move_to_position(x=50, y=50, z=5, speed=1000)
+# move_to_position(x=120, y=100, z=10, speed=600)
+# move_to_position(x=120, y=0, z=10, speed=600)
 
 ser.close()
