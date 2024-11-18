@@ -22,12 +22,21 @@ def move_to_position(x=None, y=None, z=None, speed=3000):
     command += f' F{speed}'
     send_gcode(command)
 
+def home_axes(axes=''):
+    command = f'G28 {axes}'.strip()
+    send_gcode(command)
+
+
 # Wake up the printer
 send_gcode('M17')  # Enable steppers
 send_gcode('G90')  # Set to absolute positioning
 
+# Home all axes
+# You can pass 'X Y' to home specific axes
+home_axes("Y")  
+
 # Example movement commands
-move_to_position(x=100, y=100, z=10, speed=1000)
-move_to_position(x=50, y=50, z=5, speed=1000)
+# move_to_position(x=100, y=100, z=10, speed=1000)
+# move_to_position(x=50, y=50, z=5, speed=1000)
 
 ser.close()
