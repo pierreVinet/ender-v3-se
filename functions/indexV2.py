@@ -23,7 +23,7 @@ def wait_for_response():
             if response.lower() == 'ok':
                 break
             elif response.startswith('Error'):
-                raise Exception(f"Printer Error: {response}")
+                break
         else:
             # If no response, we might need to prevent an infinite loop
             time.sleep(0.1)
