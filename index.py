@@ -33,10 +33,10 @@ send_gcode('G90')  # Set to absolute positioning
 
 # Home all axes
 # You can pass 'X Y' to home specific axes
-home_axes("Y")  
+home_axes()  
 
 # Example movement commands
 # move_to_position(x=120, y=100, z=10, speed=600)
-# move_to_position(x=120, y=0, z=10, speed=600)
+move_to_position(x=120, y=100, z=50, speed=600)
 
 ser.close()
