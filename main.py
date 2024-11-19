@@ -1,5 +1,5 @@
 import time
-from functions import send_gcode, move_to_position, home_axes, move_extruder, close_connection, initialize_port
+from functions.index import send_gcode, move_to_position, home_axes, move_extruder, close_connection, initialize_port
 
 initialize_port()
 
