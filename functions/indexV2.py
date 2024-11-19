@@ -9,11 +9,16 @@ def initialize_port():
     ser = serial.Serial('COM7', 115200, timeout=1)
     time.sleep(2)  # Wait for the connection to initialize
 
-def send_gcode(command, wait_for_ok=True):
+def send_gcode(command, wait_for_completion=False):
     ser.write((command + '\n').encode())
     print(f"Sent: {command}")
-    if wait_for_ok:
-        wait_for_response()
+    wait_for_response()  # Wait for 'ok' after sending the command
+
+    if wait_for_completion:
+        # Wait until all movements are completed
+        ser.write(('M400\n').encode())
+        print("Sent: M400")
+        wait_for_response()  # Wait for 'ok' after M400
 
 def wait_for_response():
     while True:
@@ -22,10 +27,10 @@ def wait_for_response():
             print(f"Received: {response}")
             if response.lower() == 'ok':
                 break
-            elif response.startswith('Error'):
+            elif response.lower().startswith('error'):
                 break
         else:
-            # If no response, we might need to prevent an infinite loop
+            # If no response, prevent infinite loop
             time.sleep(0.1)
 
 def move_to_position(x=None, y=None, z=None, speed=3000):
@@ -38,17 +43,17 @@ def move_to_position(x=None, y=None, z=None, speed=3000):
     if z is not None:
         command += f' Z{z}'
     command += f' F{speed}'
-    send_gcode(command)
+    send_gcode(command, wait_for_completion=True)
 
 def home_axes(axes=''):
     command = f'G28 {axes}'.strip()
-    send_gcode(command)
+    send_gcode(command, wait_for_completion=True)
 
 def move_extruder(e, speed=300):
     send_gcode('M302 S0')  # Allow cold extrusion
     send_gcode('G91')  # Ensure relative positioning
     command = f'G1 E{e} F{speed}'
-    send_gcode(command)
+    send_gcode(command, wait_for_completion=True)
     send_gcode('G90')  # Return to absolute positioning if needed
 
 def close_connection():
