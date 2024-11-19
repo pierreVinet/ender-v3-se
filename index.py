@@ -27,16 +27,24 @@ def home_axes(axes=''):
     send_gcode(command)
 
 
+def move_extruder(e, speed=300):
+    command = f'G1 E{e} F{speed}'
+    send_gcode(command)
+
 # Wake up the printer
 send_gcode('M17')  # Enable steppers
 send_gcode('G90')  # Set to absolute positioning
 
 # Home all axes
-# You can pass 'X Y' to home specific axes
-home_axes()  
+home_axes()
 
 # Example movement commands
-# move_to_position(x=120, y=100, z=10, speed=600)
-move_to_position(x=120, y=100, z=50, speed=600)
+# move_to_position(x=120, y=100, z=50, speed=600)
+
+# Rotate the extruder motor
+send_gcode('M302 S0')  # Allow cold extrusion
+send_gcode('G91')      # Set to relative positioning for extruder movement
+move_extruder(10, speed=300)  # Extrude 10 units of filament
+send_gcode('G90')      # Set back to absolute positioning
 
 ser.close()
