@@ -20,6 +20,12 @@ def send_gcode(command, wait_for_completion=False):
         print("Sent: M400")
         wait_for_response()  # Wait for 'ok' after M400
 
+def send_gcode2(command, wait_for_completion=False):
+    ser.write((command + '\n').encode())
+    print(f"Sent: {command}")
+    wait_for_response2()  # Wait for 'ok' after sending the command
+
+
 def wait_for_response():
     while True:
         response = ser.readline().decode(errors='ignore').strip()
@@ -29,6 +35,19 @@ def wait_for_response():
                 break
             elif response.lower().startswith('error'):
                 break
+        else:
+            # If no response, prevent infinite loop
+            time.sleep(0.1)
+
+def wait_for_response2():
+    while True:
+        response = ser.readline().decode(errors='ignore').strip()
+        if response:
+            print(f"Received: {response}")
+            # if response.lower() == 'ok':
+            #     break
+            # elif response.lower().startswith('error'):
+            #     break
         else:
             # If no response, prevent infinite loop
             time.sleep(0.1)
@@ -43,7 +62,7 @@ def move_to_position(x=None, y=None, z=None, speed=3000):
     if z is not None:
         command += f' Z{z}'
     command += f' F{speed}'
-    send_gcode(command, wait_for_completion=True)
+    send_gcode2(command, wait_for_completion=True)
 
 def home_axes(axes=''):
     command = f'G28 {axes}'.strip()

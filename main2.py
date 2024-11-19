@@ -17,7 +17,7 @@ send_gcode('M17')  # Enable steppers
 # home_axes()
 
 # Go up to absolute position Z=50
-move_to_position(z=100)
+move_to_position(z=50)
 
 print("Starting to move to positions")
 # Define positions
