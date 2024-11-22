@@ -9,22 +9,35 @@ def initialize_port():
     ser = serial.Serial('COM9', 115200, timeout=1)
     time.sleep(2)  # Wait for the connection to initialize
 
-def send_gcode(command, wait_for_completion=False):
+def send_gcode(command):
     ser.write((command + '\n').encode())
-    print(f"Sent: {command}")
-    wait_for_response()  # Wait for 'ok' after sending the command
+    while True:
+        response = ser.readline().decode().strip()
+        if response:
+            print(f"Sent: {command} | Received: {response}")
+            if response == 'ok':
+                break
+        time.sleep(0.1)  # Small delay for processing
 
-    if wait_for_completion:
-        # Wait until all movements are completed
-        ser.write(('M400\n').encode())
-        print("Sent: M400")
-        wait_for_response()  # Wait for 'ok' after M400
+def move_to_position(x=None, y=None, z=None, speed=3000):
+    send_gcode('G90')  # Ensure absolute positioning
+    command = 'G1'
+    if x is not None:
+        command += f' X{x}'
+    if y is not None:
+        command += f' Y{y}'
+    if z is not None:
+        command += f' Z{z}'
+    command += f' F{speed}'
+    send_gcode(command)
+    send_gcode('M400')  # Wait for moves to finish
 
-def send_gcode2(command, wait_for_completion=False):
-    ser.write((command + '\n').encode())
-    print(f"Sent: {command}")
-    wait_for_response2()  # Wait for 'ok' after sending the command
 
+def get_current_position():
+    send_gcode('M114')  # Get current position
+    response = ser.readline().decode().strip()
+    print(f"Current Position: {response}")
+    return response
 
 def wait_for_response():
     while True:
@@ -39,31 +52,6 @@ def wait_for_response():
             # If no response, prevent infinite loop
             time.sleep(0.1)
 
-def wait_for_response2():
-    while True:
-        response = ser.readline().decode(errors='ignore').strip()
-        if response:
-            print(f"Received: {response}")
-            # if response.lower() == 'ok':
-            #     break
-            # elif response.lower().startswith('error'):
-            #     break
-        else:
-            # If no response, prevent infinite loop
-            print(f"Sleep: {response}")
-            time.sleep(0.5)
-
-def move_to_position(x=None, y=None, z=None, speed=3000):
-    send_gcode('G90')  # Ensure absolute positioning
-    command = 'G1'
-    if x is not None:
-        command += f' X{x}'
-    if y is not None:
-        command += f' Y{y}'
-    if z is not None:
-        command += f' Z{z}'
-    command += f' F{speed}'
-    send_gcode2(command, wait_for_completion=True)
 
 def home_axes(axes=''):
     command = f'G28 {axes}'.strip()

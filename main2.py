@@ -14,7 +14,7 @@ initialize_port()
 send_gcode('M17')  # Enable steppers
 
 # Homing
-# home_axes() 
+home_axes() 
 
 print("Starting to move to positions")
 # Go up to absolute position Z=50
