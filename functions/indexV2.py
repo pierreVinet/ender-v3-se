@@ -55,7 +55,7 @@ def wait_for_response():
 
 def home_axes(axes=''):
     command = f'G28 {axes}'.strip()
-    send_gcode(command, wait_for_completion=True)
+    send_gcode(command)
 
 def move_extruder(e, speed=300):
     send_gcode('M302 S0')  # Allow cold extrusion
