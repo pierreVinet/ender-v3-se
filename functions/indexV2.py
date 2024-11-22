@@ -6,7 +6,7 @@ ser = None  # Global variable to hold the serial connection
 def initialize_port():
     global ser
     # Replace 'COM7' with your serial port (e.g., '/dev/ttyUSB0' for Linux)
-    ser = serial.Serial('COM7', 115200, timeout=1)
+    ser = serial.Serial('COM9', 115200, timeout=1)
     time.sleep(2)  # Wait for the connection to initialize
 
 def send_gcode(command, wait_for_completion=False):
@@ -50,7 +50,8 @@ def wait_for_response2():
             #     break
         else:
             # If no response, prevent infinite loop
-            time.sleep(0.1)
+            print(f"Sleep: {response}")
+            time.sleep(0.5)
 
 def move_to_position(x=None, y=None, z=None, speed=3000):
     send_gcode('G90')  # Ensure absolute positioning
