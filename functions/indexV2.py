@@ -2,6 +2,7 @@ import serial
 import time
 
 ser = None  # Global variable to hold the serial connection
+processing = False
 
 def initialize_port():
     global ser
@@ -10,15 +11,25 @@ def initialize_port():
     time.sleep(2)  # Wait for the connection to initialize
 
 def send_gcode(command):
+    global processing
     ser.write((command + '\n').encode())
     while True:
         response = ser.readline().decode().strip()
         if response:
-            print(f"Sent: {command} | Received: {response}")
+            if 'processing' in response:
+                if processing == False:
+                    print(f"Sent: {command} | Received: processing ...")
+                    processing = True
             if response == 'ok':
+                print(f"Sent: {command} | Received: {response}")
+                processing = False
                 break
         time.sleep(0.1)  # Small delay for processing
 
+    processing = False
+
+# speed for Gcode must be in mm/min
+# max speed of the printer is 250mm/s => 15000 mm/s 
 def move_to_position(x=None, y=None, z=None, speed=3000):
     send_gcode('G90')  # Ensure absolute positioning
     command = 'G1'
@@ -61,7 +72,7 @@ def move_extruder(e, speed=300):
     send_gcode('M302 S0')  # Allow cold extrusion
     send_gcode('G91')  # Ensure relative positioning
     command = f'G1 E{e} F{speed}'
-    send_gcode(command, wait_for_completion=True)
+    send_gcode(command)
     send_gcode('G90')  # Return to absolute positioning if needed
 
 def close_connection():
