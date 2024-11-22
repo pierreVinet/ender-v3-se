@@ -15,16 +15,15 @@ initialize_port()
 
 set_fan_speed(fan_number=0, speed=255)
 time.sleep(2)
-set_fan_speed(fan_number=1, speed=255)
-time.sleep(2)
+# set_fan_speed(fan_number=1, speed=255)
+# time.sleep(2)
 # Wake up the printer
 send_gcode('M17')  # Enable steppers
 
 # Homing
 home_axes() 
 
-stop_fan(fan_number=0)
-stop_fan(fan_number=1)
+set_fan_speed(fan_number=0, speed=255)
 
 print("Starting to move to positions")
 # Go up to absolute position Z=50
@@ -65,4 +64,6 @@ for pos_name in ['A', 'B', 'C', 'D']:
     # Go back up to Z=50
     # move_to_position(z=50)
 
+
+stop_fan(fan_number=0)
 close_connection()

@@ -80,7 +80,7 @@ def set_fan_speed(fan_number, speed):
     Set the speed of the specified fan.
 
     Parameters:
-    - fan_number (int): The fan number (usually 0 or 1).
+    - fan_number (int): The fan number 0 -> fan2, .
     - speed (int): Speed value between 0 (off) and 255 (full speed).
     """
     command = f'M106 P{fan_number} S{speed}'
