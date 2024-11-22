@@ -6,15 +6,25 @@ from functions.indexV2 import (
     home_axes,
     move_extruder,
     close_connection,
+    set_fan_speed,
+    stop_fan
 )
 
 initialize_port()
 
+
+set_fan_speed(fan_number=0, speed=255)
+time.sleep(2)
+set_fan_speed(fan_number=1, speed=255)
+time.sleep(2)
 # Wake up the printer
 send_gcode('M17')  # Enable steppers
 
 # Homing
 home_axes() 
+
+stop_fan(fan_number=0)
+stop_fan(fan_number=1)
 
 print("Starting to move to positions")
 # Go up to absolute position Z=50

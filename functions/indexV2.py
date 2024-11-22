@@ -75,6 +75,27 @@ def move_extruder(e, speed=300):
     send_gcode(command)
     send_gcode('G90')  # Return to absolute positioning if needed
 
+def set_fan_speed(fan_number, speed):
+    """
+    Set the speed of the specified fan.
+
+    Parameters:
+    - fan_number (int): The fan number (usually 0 or 1).
+    - speed (int): Speed value between 0 (off) and 255 (full speed).
+    """
+    command = f'M106 P{fan_number} S{speed}'
+    send_gcode(command)
+
+def stop_fan(fan_number):
+    """
+    Stop the specified fan.
+
+    Parameters:
+    - fan_number (int): The fan number (usually 0 or 1).
+    """
+    command = f'M107 P{fan_number}'
+    send_gcode(command)
+
 def close_connection():
     global ser
     ser.close()
