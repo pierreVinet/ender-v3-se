@@ -75,6 +75,10 @@ def move_extruder(e, speed=300):
     send_gcode(command)
     send_gcode('G90')  # Return to absolute positioning if needed
 
+def unscrew(e, speed=300):
+    #to do: extruder motor + z axis
+    send_gcode('M302 S0')  # Allow cold extrusion
+
 def set_fan_speed(fan_number, speed):
     """
     Set the speed of the specified fan.
