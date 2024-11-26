@@ -57,18 +57,26 @@ def get_position():
     # Parse position data
     print(f"Position data: {position_data}")
     # Expected format: 'X:10.00 Y:10.00 Z:0.00 E:0.00 Count X:1000 Y:1000 Z:0\nok\n'
+
+    # Split the string at 'Count' to isolate the first set of values
+    if 'Count' in position_data:
+        position_line = position_data.split('Count')[0].strip()
+    else:
+        position_line = position_data
+    
     position = {}
-    for line in position_data.split('\n'):
+    for line in position_line.split('\n'):
         if 'X:' in line and 'Y:' in line and 'Z:' in line:
             parts = line.strip().split()
             for part in parts:
                 if part.startswith('X:'):
-                    position['x'] = float(part[2:])/100
+                    position['x'] = float(part[2:])
                 elif part.startswith('Y:'):
-                    position['y'] = float(part[2:])/100
+                    position['y'] = float(part[2:])
                 elif part.startswith('Z:'):
-                    position['z'] = float(part[2:])/100
+                    position['z'] = float(part[2:])
     return position
+
 
 def wait_for_response():
     while True:
