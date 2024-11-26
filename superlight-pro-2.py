@@ -138,5 +138,5 @@ def get_superlight_position():
     close_connection()
 
 
-# main()
-get_superlight_position()
+main()
+# get_superlight_position()
