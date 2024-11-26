@@ -134,9 +134,9 @@ def get_superlight_position():
 
     print("Recorded positions:")
     print(positions)
-    save_positions(positions, "positions-stage-1.json")
+    save_positions(positions, "positions-stage-1-v2.json")
     close_connection()
 
 
-main()
-# get_superlight_position()
+# main()
+get_superlight_position()

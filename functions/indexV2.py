@@ -63,11 +63,11 @@ def get_position():
             parts = line.strip().split()
             for part in parts:
                 if part.startswith('X:'):
-                    position['x'] = float(part[2:]/100)
+                    position['x'] = float(part[2:])/100
                 elif part.startswith('Y:'):
-                    position['y'] = float(part[2:]/100)
+                    position['y'] = float(part[2:])/100
                 elif part.startswith('Z:'):
-                    position['z'] = float(part[2:]/100)
+                    position['z'] = float(part[2:])/100
     return position
 
 def wait_for_response():
