@@ -8,7 +8,8 @@ from functions.indexV2 import (
     set_fan_speed,
     stop_fan,
     unscrew,
-    get_position
+    get_position,
+    save_positions
 )
 
 # Costants
@@ -127,8 +128,10 @@ def get_superlight_position():
             print(f"Failed to get position {label}")
             return 
 
+
     print("Recorded positions:")
     print(positions)
+    save_positions(positions)
     close_connection()
 
 

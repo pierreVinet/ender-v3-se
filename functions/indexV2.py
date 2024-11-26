@@ -1,5 +1,6 @@
 import serial
 import time
+import json
 
 ser = None  # Global variable to hold the serial connection
 processing = False
@@ -126,4 +127,9 @@ def stop_fan(fan_number):
 def close_connection():
     global ser
     ser.close()
+
+def save_positions(positions):
+    with open('positions.json', 'w') as f:
+        json.dump(positions, f, indent=4)
+    print("Positions saved to positions.json")
 

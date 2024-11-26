@@ -7,7 +7,7 @@ from functions.indexV2 import (
     move_extruder,
     close_connection,
     set_fan_speed,
-    stop_fan
+    stop_fan,
 )
 
 initialize_port()
