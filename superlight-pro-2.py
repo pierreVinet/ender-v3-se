@@ -109,7 +109,7 @@ def get_superlight_position():
     set_fan_speed(fan_number=0, speed=255)
 
     # Go up to navigation position
-    move_to_position(z=z_fast)
+    move_to_position(z=32.7)
     time.sleep(1)
     
     positions = {}
