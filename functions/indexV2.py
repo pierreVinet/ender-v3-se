@@ -63,11 +63,11 @@ def get_position():
             parts = line.strip().split()
             for part in parts:
                 if part.startswith('X:'):
-                    position['x'] = float(part[2:]/1000)
+                    position['x'] = float(part[2:]/100)
                 elif part.startswith('Y:'):
-                    position['y'] = float(part[2:]/1000)
+                    position['y'] = float(part[2:]/100)
                 elif part.startswith('Z:'):
-                    position['z'] = float(part[2:]/1000)
+                    position['z'] = float(part[2:]/100)
     return position
 
 def wait_for_response():
@@ -98,6 +98,10 @@ def move_extruder(e, speed=300):
 def unscrew(e, speed=300):
     #to do: extruder motor + z axis
     send_gcode('M302 S0')  # Allow cold extrusion
+    send_gcode('G91')  # Ensure relative positioning
+    command = f'G1 E{e} F{speed}'
+    send_gcode(command)
+    send_gcode('G90')  # Return to absolute positioning if needed
 
 def set_fan_speed(fan_number, speed):
     """
