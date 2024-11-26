@@ -13,17 +13,16 @@ from functions.indexV2 import (
 initialize_port()
 
 
-set_fan_speed(fan_number=0, speed=255)
-time.sleep(2)
-# set_fan_speed(fan_number=1, speed=255)
-# time.sleep(2)
 # Wake up the printer
 send_gcode('M17')  # Enable steppers
 
 # Homing
-home_axes() 
+# home_axes() 
+
 
 set_fan_speed(fan_number=0, speed=255)
+time.sleep(20)
+# set_fan_speed(fan_number=0, speed=255)
 
 print("Starting to move to positions")
 # Go up to absolute position Z=50
@@ -35,7 +34,7 @@ time.sleep(1)
 # Define positions
 positions = {
     'A': {'x': 0, 'y': 0, 'z': 20},
-    'B': {'x': 220, 'y': 00, 'z': 20},
+    'B': {'x': 220, 'y': 0, 'z': 20},
     'C': {'x': 220, 'y': 220, 'z': 20},
     'D': {'x': 0, 'y': 220, 'z': 20},
 }

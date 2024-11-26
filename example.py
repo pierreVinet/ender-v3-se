@@ -1,8 +1,10 @@
 import serial
 import time
 
+
+port = 'COM9'
 # Replace 'COM3' with your serial port (e.g., '/dev/ttyUSB0' for Linux)
-ser = serial.Serial('COM7', 115200, timeout=1)
+ser = serial.Serial(port, 115200, timeout=1)
 time.sleep(2)  # Wait for the connection to initialize
 
 def send_gcode(command):
