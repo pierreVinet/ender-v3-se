@@ -63,11 +63,11 @@ def get_position():
             parts = line.strip().split()
             for part in parts:
                 if part.startswith('X:'):
-                    position['X'] = float(part[2:])
+                    position['x'] = float(part[2:]/1000)
                 elif part.startswith('Y:'):
-                    position['Y'] = float(part[2:])
+                    position['y'] = float(part[2:]/1000)
                 elif part.startswith('Z:'):
-                    position['Z'] = float(part[2:])
+                    position['z'] = float(part[2:]/1000)
     return position
 
 def wait_for_response():
@@ -129,3 +129,7 @@ def save_positions(positions, filename='positions.json'):
         json.dump(positions, f, indent=4)
     print(f'Positions saved to {filename}')
 
+def open_json(filename='positions-stage-1.json'):
+    with open(filename, 'r') as f:
+        data = json.load(f)
+        return data
