@@ -45,11 +45,33 @@ def move_to_position(x=None, y=None, z=None, speed=3000):
     send_gcode('M400')  # Wait for moves to finish
 
 
-def get_current_position():
-    send_gcode('M114')  # Get current position
-    response = ser.readline().decode().strip()
-    print(f"Current Position: {response}")
-    return response
+# def get_current_position():
+#     send_gcode('M114')  # Get current position
+#     response = ser.readline().decode().strip()
+#     print(f"Current Position: {response}")
+#     return response
+
+def get_position():
+    """Get the current position from the printer."""
+    send_gcode('M114')
+    time.sleep(0.1)
+    position_data = ''
+    while ser.in_waiting:
+        position_data += ser.readline().decode()
+    # Parse position data
+    # Expected format: 'X:10.00 Y:10.00 Z:0.00 E:0.00 Count X:1000 Y:1000 Z:0\nok\n'
+    position = {}
+    for line in position_data.split('\n'):
+        if 'X:' in line and 'Y:' in line and 'Z:' in line:
+            parts = line.strip().split()
+            for part in parts:
+                if part.startswith('X:'):
+                    position['X'] = float(part[2:])
+                elif part.startswith('Y:'):
+                    position['Y'] = float(part[2:])
+                elif part.startswith('Z:'):
+                    position['Z'] = float(part[2:])
+    return position
 
 def wait_for_response():
     while True:
@@ -104,3 +126,4 @@ def stop_fan(fan_number):
 def close_connection():
     global ser
     ser.close()
+
