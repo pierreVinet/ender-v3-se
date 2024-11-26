@@ -46,20 +46,16 @@ def move_to_position(x=None, y=None, z=None, speed=3000):
     send_gcode('M400')  # Wait for moves to finish
 
 
-# def get_current_position():
-#     send_gcode('M114')  # Get current position
-#     response = ser.readline().decode().strip()
-#     print(f"Current Position: {response}")
-#     return response
-
 def get_position():
     """Get the current position from the printer."""
-    send_gcode('M114')
-    time.sleep(0.1)
-    position_data = ''
-    while ser.in_waiting:
-        position_data += ser.readline().decode()
+    ser.write(('M114' + '\n').encode())
+    position_data = ser.readline().decode().strip()
+
+    while "X" not in position_data:
+        # print(f"Not good: position data: {position_data}")
+        position_data = ser.readline().decode().strip()
     # Parse position data
+    print(f"Position data: {position_data}")
     # Expected format: 'X:10.00 Y:10.00 Z:0.00 E:0.00 Count X:1000 Y:1000 Z:0\nok\n'
     position = {}
     for line in position_data.split('\n'):
@@ -128,8 +124,8 @@ def close_connection():
     global ser
     ser.close()
 
-def save_positions(positions):
-    with open('positions.json', 'w') as f:
+def save_positions(positions, filename='positions.json'):
+    with open(filename, 'w') as f:
         json.dump(positions, f, indent=4)
-    print("Positions saved to positions.json")
+    print(f'Positions saved to {filename}')
 
