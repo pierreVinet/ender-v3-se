@@ -1,5 +1,6 @@
 import time
-from functions.indexV2 import (
+from functions.arduino import move_servo
+from functions.creality import (
     initialize_port,
     send_gcode,
     move_to_position,
@@ -28,7 +29,7 @@ z_speed = 300
 
 
 # Define mouse positions
-positions = open_json("positions-stage-1.json")
+positions = open_json("data/positions-stage-1.json")
 # positions = {
 #     'A': {'x': x_offset+0.5, 'y': y_offset+8, 'z': z_offset},
 #     'B': {'x': x_offset+3.95, 'y': y_offset+8, 'z': z_offset},
@@ -75,6 +76,9 @@ def main():
         move_to_position(z=positions[pos_name]['z'])
 
         # Magnetize endpoint
+        time.sleep(2)
+        move_servo(180)
+        time.sleep(2)
 
         # Unscrew
         time.sleep(1)
@@ -94,6 +98,9 @@ def main():
         )
 
         # Demagnetize endpoint
+        time.sleep(2)
+        move_servo(0)
+        time.sleep(2)
 
 
     stop_fan(fan_number=0)
@@ -134,7 +141,7 @@ def get_superlight_position():
 
     print("Recorded positions:")
     print(positions)
-    save_positions(positions, "positions-stage-1-v2.json")
+    save_positions(positions, "data/positions-stage-1-v2.json")
     close_connection()
 
 
