@@ -141,7 +141,7 @@ def save_positions(positions, filename='positions.json'):
         json.dump(positions, f, indent=4)
     print(f'Positions saved to {filename}')
 
-def open_json(filename='positions-stage-1.json'):
+def open_json(filename='data/positions-stage-1.json'):
     with open(filename, 'r') as f:
         data = json.load(f)
         return data
