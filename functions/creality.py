@@ -4,7 +4,7 @@ import json
 
 ser = None  # Global variable to hold the serial connection
 processing = False
-port = 'COM7'
+port = 'COM9'
 
 def initialize_port():
     global ser
