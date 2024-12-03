@@ -74,8 +74,7 @@ def main():
 
         # Unscrew
         time.sleep(1)
-        # to do: relationship between speed and rotation
-        unscrew(10, speed=z_speed)  
+        unscrew(3, speed=z_speed)  
         time.sleep(1)
 
         # Go back up to Z fast
