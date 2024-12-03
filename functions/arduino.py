@@ -7,7 +7,6 @@ baud_rate = 9600
 
 # Establish connection to Arduino
 arduino = serial.Serial(arduino_port, baud_rate, timeout=1)
-time.sleep(2)  # Wait for the connection to initialize
 
 def move_servo(angle):
     if 0 <= angle <= 180:

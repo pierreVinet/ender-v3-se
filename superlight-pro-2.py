@@ -1,5 +1,5 @@
 import time
-from functions.arduino import move_servo
+from functions.arduino import close_arduino, move_servo
 from functions.creality import (
     initialize_port,
     send_gcode,
@@ -105,6 +105,7 @@ def main():
 
     stop_fan(fan_number=0)
     close_connection()
+    close_arduino()
 
 
 def get_superlight_position():
@@ -143,6 +144,7 @@ def get_superlight_position():
     print(positions)
     save_positions(positions, "data/positions-stage-1-v2.json")
     close_connection()
+    close_arduino()
 
 
 main()
