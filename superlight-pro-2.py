@@ -30,14 +30,6 @@ z_speed = 300
 
 # Define mouse positions
 positions = open_json("data/positions-stage-1.json")
-# positions = {
-#     'A': {'x': x_offset+0.5, 'y': y_offset+8, 'z': z_offset},
-#     'B': {'x': x_offset+3.95, 'y': y_offset+8, 'z': z_offset},
-#     'C': {'x': x_offset+4.45, 'y': y_offset+1.9, 'z': z_offset},
-#     'D': {'x': x_offset+3.45, 'y': y_offset+0, 'z': z_offset},
-#     'E': {'x': x_offset+1, 'y': y_offset+0, 'z': z_offset},
-#     'F': {'x': x_offset+0, 'y': y_offset+1.9, 'z': z_offset},
-# }  
 
 
 def main():

@@ -104,13 +104,18 @@ def move_extruder(e, speed=300):
     send_gcode('G90')  # Return to absolute positioning if needed
 
 def unscrew(e, speed=300):
-    #to do: extruder motor + z axis
-    send_gcode('M302 S0')  # Allow cold extrusion
-    send_gcode('G91')  # Ensure relative positioning
-    command = f'G1 E{e} F{speed}'
+    # Allow cold extrusion and set relative positioning
+    send_gcode('M302 S0')
+    send_gcode('G91')
+    # Calculate the corresponding Z-axis movement
+    z_movement = (3.5 / 3) * e  # Z moves up 3.5 mm for every 3 rotations
+    # Command both E (extruder) and Z axes to move simultaneously
+    command = f'G1 E{e} Z{z_movement} F{speed}'
     send_gcode(command)
-    send_gcode('G90')  # Return to absolute positioning if needed
+    # Return to absolute positioning if necessary
+    send_gcode('G90')
 
+   
 def set_fan_speed(fan_number, speed):
     """
     Set the speed of the specified fan.
