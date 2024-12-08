@@ -70,6 +70,7 @@ def main():
         move_to_position(z=positions[pos_name]['z'] + 5)
 
         #wait for user input
+        input(f"Press 'Enter' to procede...")
 
         # Go down to specified Z
         move_to_position(z=positions[pos_name]['z'])
