@@ -19,13 +19,14 @@ x_offset = 0
 y_offset = 0
 z_offset = 0
 
-x_box = 0
-y_box = 0
+x_box = 220
+y_box = 220
 
 z_fast = 50
-max_speed = 15000
+max_speed = 10000
 speed = 10000
 z_speed = 300
+speed_unscrew = 20
 
 
 # Define mouse positions
@@ -52,6 +53,7 @@ def main():
     print("Start disassembling Superlight Pro 2")
     time.sleep(1)
 
+    # move_servo(180)
 
     for pos_name in ['A', 'B', 'C', 'D', 'E', 'F']:
         print(f"Position: {pos_name}")
@@ -65,17 +67,21 @@ def main():
         )
 
         # Go down to specified Z
+        move_to_position(z=positions[pos_name]['z'] + 5)
+
+        #wait for user input
+
+        # Go down to specified Z
         move_to_position(z=positions[pos_name]['z'])
 
         # Magnetize endpoint
-        time.sleep(2)
+        # time.sleep(2)
         move_servo(180)
         time.sleep(2)
 
         # Unscrew
         time.sleep(1)
-        # to do: relationship between speed and rotation
-        unscrew(10, speed=z_speed)  
+        unscrew(3, speed=speed_unscrew)
         time.sleep(1)
 
         # Go back up to Z fast
@@ -90,7 +96,7 @@ def main():
         )
 
         # Demagnetize endpoint
-        time.sleep(2)
+        # time.sleep(2)
         move_servo(0)
         time.sleep(2)
 

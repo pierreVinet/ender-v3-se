@@ -1,5 +1,5 @@
 import time
-from functions.arduino import close_arduino, move_servo
+from functions.arduino import move_servo
 from functions.creality import (
     initialize_port,
     send_gcode,
@@ -22,10 +22,12 @@ z_offset = 0
 x_box = 0
 y_box = 0
 
-z_fast = 50
+z_fast = 10
+# max_speed = 15000
 max_speed = 10000
 speed = 10000
 z_speed = 300
+speed_unscrew = 20
 
 
 # Define mouse positions
@@ -43,45 +45,48 @@ def main():
 
     # Homing
     print("Homing ...")
-    home_axes() 
+    # home_axes()
 
     set_fan_speed(fan_number=0, speed=255)
 
     # Go up to navigation position
-    move_to_position(z=z_fast)
+    # move_to_position(z=z_fast)
     print("Start disassembling Superlight Pro 2")
     time.sleep(1)
 
+    move_servo(180)
 
     for pos_name in ['A']:
         print(f"Position: {pos_name}")
 
-        # Move to position 
-        move_to_position(
-            x=positions[pos_name]['x'],
-            y=positions[pos_name]['y'],
-            z=0,
-            speed=speed
-        )
+        # Move to position
+        # move_to_position(
+        #     x=positions[pos_name]['x'],
+        #     y=positions[pos_name]['y'],
+        #     z=z_fast,
+        #     speed=speed
+        # )
 
         # # Go down to specified Z
         # move_to_position(z=positions[pos_name]['z'])
 
-        # # Magnetize endpoint
-        # time.sleep(2)
-        # move_servo(180)
-        # time.sleep(2)
+        # Magnetize endpoint
+        time.sleep(2)
+        move_servo(180)
+        time.sleep(2)
 
-        # # Unscrew
-        # time.sleep(1)
-        # # to do: relationship between speed and rotation
-        # unscrew(10, speed=z_speed)  
-        # time.sleep(1)
+        # Unscrew
+        time.sleep(1)
+        unscrew(10, speed=speed_unscrew)
+        time.sleep(10)
 
-        # # Go back up to Z fast
-        # move_to_position(z=z_fast)
+        
+        # move_to_position(z=10)
 
-        # # Move to the screw box
+        # Go back up to Z fast
+        move_to_position(z=z_fast)
+
+        # Move to the screw box
         # move_to_position(
         #     x=x_box,
         #     y=y_box,
@@ -89,15 +94,21 @@ def main():
         #     speed=speed
         # )
 
-        # # Demagnetize endpoint
-        # time.sleep(2)
-        # move_servo(0)
-        # time.sleep(2)
+        # move_to_position(
+        #     x=50,
+        #     y=50,
+        #     z=z_fast,
+        #     speed=speed
+        # )
+
+        # Demagnetize endpoint
+        time.sleep(2)
+        move_servo(0)
+        time.sleep(2)
 
 
     stop_fan(fan_number=0)
     close_connection()
-    close_arduino()
 
 
 def get_superlight_position():
@@ -107,14 +118,14 @@ def get_superlight_position():
     send_gcode('M17')  # Enable steppers
     # Homing
     print("Homing ...")
-    home_axes() 
+    home_axes()
 
     set_fan_speed(fan_number=0, speed=255)
 
     # Go up to navigation position
     move_to_position(z=32.7)
     time.sleep(1)
-    
+
     positions = {}
     position_labels = ['A', 'B', 'C', 'D', 'E', 'F']
 
@@ -129,14 +140,13 @@ def get_superlight_position():
             print(f"Position {label}: {position}")
         else:
             print(f"Failed to get position {label}")
-            return 
+            return
 
 
     print("Recorded positions:")
     print(positions)
     save_positions(positions, "data/positions-stage-1-v2.json")
     close_connection()
-    close_arduino()
 
 
 main()
