@@ -77,7 +77,7 @@ def main():
         move_to_position(z=positions[pos_name]['z'] + 5)
 
         #wait for user input
-        input(f"Press 'Enter' to procede...")
+        # input(f"Press 'Enter' to procede...")
 
         # Go down to specified Z
         move_to_position(z=positions[pos_name]['z'])
@@ -89,7 +89,7 @@ def main():
 
         # Unscrew
         # time.sleep(1)
-        unscrew(0.5, speed=speed_unscrew*6, elevation=False)
+        unscrew(1, speed=speed_unscrew*3, elevation=False)
         unscrew(3, speed=speed_unscrew)
         # time.sleep(1)
 
@@ -153,7 +153,9 @@ def get_superlight_position():
             print(f"Position {label}: {position}")
         else:
             print(f"Failed to get position {label}")
-            return
+            return 
+        
+        unscrew(3, speed=speed_unscrew)
 
         # Ask user if the position is correct
         user_input = input("Press 'f' to redo the position or 'Enter' to continue: ").strip().lower()
@@ -171,5 +173,5 @@ def get_superlight_position():
     close_arduino()
 
 
-# main()
-get_superlight_position()
+main()
+# get_superlight_position()
