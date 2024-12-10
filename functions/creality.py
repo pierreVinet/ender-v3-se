@@ -103,15 +103,15 @@ def move_extruder(e, speed=300):
     send_gcode(command)
     send_gcode('G90')  # Return to absolute positioning if needed
 
-def unscrew(revolutions, speed=50):
+def unscrew(revolutions, speed=50, elevation=True):
     # Allow cold extrusion and set relative positioning
     send_gcode('M302 S0')
     send_gcode('G91')
     e = revolutions * 7.533
     # Calculate the corresponding Z-axis movement
-    z_movement = (3.5 / 3) * revolutions  # Z moves up 3.5 mm for every 3 rotations
+    z_movement = (2.5 / 3) * revolutions  # Z moves up 3.5 mm for every 3 rotations
     # Command both E (extruder) and Z axes to move simultaneously
-    command = f'G1 E{-e} Z{z_movement} F{speed}'
+    command = f'G1 E{-e} Z{z_movement} F{speed}' if elevation else f'G1 E{-e} F{speed}'
     send_gcode(command)
     # Return to absolute positioning if necessary
     send_gcode('G90')

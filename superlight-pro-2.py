@@ -19,10 +19,16 @@ x_offset = 0
 y_offset = 0
 z_offset = 0
 
-x_box = 220
+x_home = 134.25
+y_home = 125.0
+
+x_box = 110
 y_box = 220
 
-z_fast = 50
+x_finish = 110
+y_finish = 220
+
+z_fast = 46
 max_speed = 10000
 speed = 10000
 z_speed = 300
@@ -31,6 +37,7 @@ speed_unscrew = 20
 
 # Define mouse positions
 positions = open_json("data/positions-stage-1.json")
+# positions = open_json("data/positions-stage-2.json")
 
 
 def main():
@@ -51,7 +58,7 @@ def main():
     # Go up to navigation position
     move_to_position(z=z_fast)
     print("Start disassembling Superlight Pro 2")
-    time.sleep(1)
+    # time.sleep(1)
 
     # move_servo(180)
 
@@ -78,12 +85,13 @@ def main():
         # Magnetize endpoint
         # time.sleep(2)
         move_servo(180)
-        time.sleep(2)
+        time.sleep(1)
 
         # Unscrew
-        time.sleep(1)
+        # time.sleep(1)
+        unscrew(0.5, speed=speed_unscrew*6, elevation=False)
         unscrew(3, speed=speed_unscrew)
-        time.sleep(1)
+        # time.sleep(1)
 
         # Go back up to Z fast
         move_to_position(z=z_fast)
@@ -99,8 +107,15 @@ def main():
         # Demagnetize endpoint
         # time.sleep(2)
         move_servo(0)
-        time.sleep(2)
+        time.sleep(1
+                   )
 
+    move_to_position(
+        x=x_finish,
+        y=y_finish,
+        z=z_fast,
+        speed=speed
+    )
 
     stop_fan(fan_number=0)
     close_connection()
@@ -123,7 +138,7 @@ def get_superlight_position():
     time.sleep(1)
     
     positions = {}
-    position_labels = ['A', 'B', 'C', 'D', 'E', 'F']
+    position_labels = ["buffer", 'A', 'B', 'C', 'D', 'E', 'F']
 
 
     for idx, label in enumerate(position_labels):
@@ -141,10 +156,10 @@ def get_superlight_position():
 
     print("Recorded positions:")
     print(positions)
-    save_positions(positions, "data/positions-stage-1-v2.json")
+    save_positions(positions, "data/positions-stage-2-v2.json")
     close_connection()
     close_arduino()
 
 
-main()
-# get_superlight_position()
+# main()
+get_superlight_position()
