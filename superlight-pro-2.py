@@ -139,19 +139,29 @@ def get_superlight_position():
     
     positions = {}
     position_labels = ["buffer", 'A', 'B', 'C', 'D', 'E', 'F']
+    idx = 0
 
-
-    for idx, label in enumerate(position_labels):
+    while idx < len(position_labels):
+        label = position_labels[idx]
         input(f"Press 'Enter' to record position {label}...")
-        # Wait a moment to ensure printer is ready
+        # Wait a moment to ensure the printer is ready
         time.sleep(0.5)
         position = get_position()
+
         if position:
             positions[label] = position
             print(f"Position {label}: {position}")
         else:
             print(f"Failed to get position {label}")
-            return 
+            return
+
+        # Ask user if the position is correct
+        user_input = input("Press 'f' to redo the position or 'Enter' to continue: ").strip().lower()
+        if user_input == "f":
+            print(f"Redoing position {label}...")
+            continue  # Redo the current label
+        else:
+            idx += 1  # Move to the next label
 
 
     print("Recorded positions:")
