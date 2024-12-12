@@ -93,6 +93,8 @@ def wait_for_response():
 
 
 def home_axes(axes=''):
+    
+    move_to_position(z=30)
     command = f'G28 {axes}'.strip()
     send_gcode(command)
 

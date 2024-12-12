@@ -28,19 +28,26 @@ y_box = 220
 x_finish = 110
 y_finish = 220
 
-z_fast = 46
+z_fast_stage_1 = 46
+z_fast_stage_2 = 37
 max_speed = 10000
 speed = 10000
 z_speed = 300
 speed_unscrew = 20
 
+label_positions_stage_1 = ['A', 'B', 'C', 'D', 'E', 'F']
+# label_positions_stage_2 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+label_positions_stage_2 = ['A', 'B', 'C', 'D']
 
-# Define mouse positions
-positions = open_json("data/positions-stage-1.json")
-# positions = open_json("data/positions-stage-2.json")
 
 
-def main():
+
+def main(stage=1):
+    # Define mouse positions
+    positions = open_json("data/positions-stage-1.json") if stage == 1 else open_json("data/positions-stage-2.json")
+    # positions = open_json("data/positions-stage-2.json")
+
+    z_fast = z_fast_stage_1 if stage == 1 else z_fast_stage_2
     initialize_port()
 
     set_fan_speed(fan_number=0, speed=255)
@@ -51,7 +58,7 @@ def main():
 
     # Homing
     print("Homing ...")
-    home_axes() 
+    home_axes()
 
     set_fan_speed(fan_number=0, speed=255)
 
@@ -62,10 +69,13 @@ def main():
 
     # move_servo(180)
 
-    for pos_name in ['A', 'B', 'C', 'D', 'E', 'F']:
+
+    label_positions = label_positions_stage_1 if stage == 1 else label_positions_stage_2
+
+    for pos_name in label_positions:
         print(f"Position: {pos_name}")
 
-        # Move to position 
+        # Move to position
         move_to_position(
             x=positions[pos_name]['x'],
             y=positions[pos_name]['y'],
@@ -77,7 +87,7 @@ def main():
         move_to_position(z=positions[pos_name]['z'] + 5)
 
         #wait for user input
-        # input(f"Press 'Enter' to procede...")
+        # input(f"Press 'Enter' to proced...")
 
         # Go down to specified Z
         move_to_position(z=positions[pos_name]['z'])
@@ -89,8 +99,8 @@ def main():
 
         # Unscrew
         # time.sleep(1)
-        unscrew(1, speed=speed_unscrew*3, elevation=False)
-        unscrew(3, speed=speed_unscrew)
+        # unscrew(1, speed=speed_unscrew*3, elevation=False)
+        unscrew(3 if stage == 1 else 4, speed=speed_unscrew)
         # time.sleep(1)
 
         # Go back up to Z fast
@@ -122,23 +132,23 @@ def main():
     close_arduino()
 
 
-def get_superlight_position():
+def get_superlight_position(stage=1):
     initialize_port()
 
     # Wake up the printer
     send_gcode('M17')  # Enable steppers
     # Homing
     print("Homing ...")
-    home_axes() 
+    home_axes()
 
     set_fan_speed(fan_number=0, speed=255)
 
     # Go up to navigation position
     move_to_position(z=32.7)
     time.sleep(1)
-    
+
     positions = {}
-    position_labels = ["buffer", 'A', 'B', 'C', 'D', 'E', 'F']
+    position_labels = ["buffer", 'A', 'B', 'C', 'D', 'E', 'F', "G", "H"]
     idx = 0
 
     while idx < len(position_labels):
@@ -148,13 +158,6 @@ def get_superlight_position():
         time.sleep(0.5)
         position = get_position()
 
-        if position:
-            positions[label] = position
-            print(f"Position {label}: {position}")
-        else:
-            print(f"Failed to get position {label}")
-            return 
-        
         unscrew(3, speed=speed_unscrew)
 
         # Ask user if the position is correct
@@ -164,14 +167,20 @@ def get_superlight_position():
             continue  # Redo the current label
         else:
             idx += 1  # Move to the next label
+            if position:
+                positions[label] = position
+                print(f"Position {label}: {position}")
+            else:
+                print(f"Failed to get position {label}")
+                return
 
 
     print("Recorded positions:")
     print(positions)
-    save_positions(positions, "data/positions-stage-2-v2.json")
+    save_positions(positions, "data/positions-stage-2-v3.json")
     close_connection()
     close_arduino()
 
 
-main()
-# get_superlight_position()
+main(stage=1)
+# get_superlight_position(stage=2)
