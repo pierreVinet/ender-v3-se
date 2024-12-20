@@ -58,7 +58,7 @@ def main(stage=1):
 
     # Homing
     print("Homing ...")
-    home_axes()
+    # home_axes()
 
     set_fan_speed(fan_number=0, speed=255)
 
@@ -182,5 +182,5 @@ def get_superlight_position(stage=1):
     close_arduino()
 
 
-main(stage=1)
+main(stage=2)
 # get_superlight_position(stage=2)
